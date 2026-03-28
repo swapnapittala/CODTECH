@@ -1,0 +1,71 @@
+package files;
+import java.io.FileWriter;
+import java.io.*;
+import java.util.*;
+public class FileDemo{
+public static void main(String[] args) {
+     String fileName = "sample.txt";
+     // 1. WRITE to file
+     writeFile(fileName);
+     // 2. READ from file
+    readFile(fileName);
+     // 3. MODIFY file
+     modifyFile(fileName);
+ }
+// Method to write into file
+public static void writeFile(String fileName) {
+  try {
+FileWriter writer = new FileWriter(fileName);
+ writer.write("Hello Swapna\n");
+ writer.write("Welcome to Java File Handling\n");
+writer.close();
+System.out.println("File written successfully.\n");
+ } 
+catch (IOException e) {
+ System.out.println("Error writing file.");
+		        }
+		    }
+
+ // Method to read file
+ public static void readFile(String fileName) {
+ try {
+  BufferedReader reader = new BufferedReader(new FileReader(fileName));
+String line;
+ System.out.println("Reading File:");
+ while ((line = reader.readLine()) != null) {
+System.out.println(line);
+}
+reader.close();
+System.out.println();
+ } 
+catch (IOException e) {
+ System.out.println("Error reading file.");
+		        }
+		    }
+
+  // Method to modify file (replace word)
+ public static void modifyFile(String fileName) {
+ try {
+BufferedReader reader = new BufferedReader(new FileReader(fileName));
+StringBuilder content = new StringBuilder();
+String line;
+ while ((line = reader.readLine()) != null) {
+// Replace word
+line = line.replace("Java", "Advanced Java");
+ content.append(line).append("\n");
+}
+ reader.close();
+ // Write updated content back
+FileWriter writer = new FileWriter(fileName);
+ writer.write(content.toString());
+writer.close();
+ System.out.println("File modified successfully.\n");
+ // Show updated content
+ readFile(fileName);
+} 
+catch (IOException e) {
+System.out.println("Error modifying file.");
+		        }
+		    }
+		
+}
