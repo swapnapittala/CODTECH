@@ -1,0 +1,33 @@
+package aPI;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class SimpleAPI {
+
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.agify.io/?name=swapna");
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream()));
+
+            String line;
+            StringBuilder response = new StringBuilder();
+
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+            System.out.println("API Response:");
+            System.out.println(response.toString());
+
+        } catch (Exception e) {
+            System.out.println("Error fetching data");
+        }
+    }
+}
