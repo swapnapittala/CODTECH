@@ -1,7 +1,7 @@
 SERVER
 
 
-package Arrays;
+package Pack;
 import java.io.*;
 import java.net.*;
 import java.util.*;
