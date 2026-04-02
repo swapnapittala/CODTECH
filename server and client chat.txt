@@ -1,0 +1,117 @@
+SERVER
+
+
+package Arrays;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+public class ChatServer {
+static List<ClientHandler> clients = new ArrayList<>();
+public static void main(String[] args) {
+try {
+ ServerSocket serverSocket = new ServerSocket(5000);
+System.out.println("Server started...");
+   while (true) {
+  Socket socket = serverSocket.accept();
+ System.out.println("Client connected");
+ClientHandler client = new ClientHandler(socket);
+clients.add(client);
+
+ Thread t = new Thread(client);
+  t.start();
+}
+
+  } 
+catch (IOException e) {
+e.printStackTrace();
+		        }
+		    }
+
+ // Broadcast message to all clients
+public static void broadcast(String message, ClientHandler sender) {
+for (ClientHandler client : clients) {
+ if (client != sender) {
+client.sendMessage(message);
+                                   }
+		        }
+		    }
+		}
+
+// Thread class
+class ClientHandler implements Runnable {
+    private Socket socket;
+  private BufferedReader reader;
+ private PrintWriter writer;
+public ClientHandler(Socket socket) {
+  this.socket = socket;
+ try {
+reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+ writer = new PrintWriter(socket.getOutputStream(), true);
+  }
+ catch (IOException e) {
+e.printStackTrace();
+ }
+  }
+ public void run() {
+ String msg;
+ try {
+while ((msg = reader.readLine()) != null) {
+ System.out.println("Message: " + msg);
+   ChatServer.broadcast(msg, this);
+   }
+  } 
+catch (IOException e) {
+  System.out.println("Client disconnected");
+		        }
+		    }
+
+  public void sendMessage(String msg) {
+  writer.println(msg);
+		    }
+		
+}
+
+
+
+SERVER
+
+
+package Pack1;
+import java.io.*;
+import java.net.*;
+public class ChatClient {
+public static void main(String[] args) {
+ try {
+Socket socket = new Socket("localhost", 5000);
+   BufferedReader reader = new BufferedReader(
+new InputStreamReader(socket.getInputStream()));
+PrintWriter writer = new PrintWriter(
+socket.getOutputStream(), true);
+ BufferedReader console = new BufferedReader(
+ new InputStreamReader(System.in));
+  // Thread to receive messages
+new Thread(() -> {
+	String msg;
+   try {
+while ((msg = reader.readLine()) != null) {
+ System.out.println(msg);
+ }
+ } 
+catch (IOException e) {
+      System.out.println("Disconnected");
+  }
+ }).start();
+ // Send messages
+  String input;
+ while ((input = console.readLine()) != null) {
+writer.println(input);
+ }
+} 
+catch (IOException e) {
+e.printStackTrace();
+		        }
+		    }
+		
+}
+
