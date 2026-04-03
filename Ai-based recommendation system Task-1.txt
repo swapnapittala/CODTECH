@@ -1,0 +1,41 @@
+package Pack3;
+import java.util.*;
+public class RecommendationSystem {
+static Map<Integer, List<Integer>> userData = new HashMap<>();
+ public static void main(String[] args) {
+   // Sample data
+  userData.put(1, Arrays.asList(101, 102));
+userData.put(2, Arrays.asList(101, 104));
+userData.put(3, Arrays.asList(102, 103));
+  int targetUser = 1;
+ System.out.println("Recommendations for User " + targetUser + ":");
+ List<Integer> recommendations = recommendItems(targetUser);
+  for (int item : recommendations) {
+            System.out.println("Item ID: " + item);
+        }
+    }
+
+public static List<Integer> recommendItems(int user) {
+
+Set<Integer> recommended = new HashSet<>();
+ List<Integer> targetItems = userData.get(user);
+  for (int otherUser : userData.keySet()) {
+   if (otherUser != user) {
+  List<Integer> otherItems = userData.get(otherUser);
+   // Find common items
+ for (int item : targetItems) {
+   if (otherItems.contains(item)) {
+  // Add new items
+ for (int newItem : otherItems) {
+   if (!targetItems.contains(newItem)) {
+   recommended.add(newItem);
+                     }
+                        }
+                    }
+                }
+            }
+        }
+
+  return new ArrayList<>(recommended);
+    }
+}
