@@ -1,0 +1,73 @@
+package Pack4;
+import java.io.*;
+import java.util.*;
+
+public class RecommendationSystem {
+
+    static Map<Integer, List<Integer>> userData = new HashMap<>();
+
+    public static void main(String[] args) {
+
+        loadData("C:\\Users\\hp\\Documents\\data.txt");
+
+        int targetUser = 1;
+
+        System.out.println("Recommendations for User " + targetUser + ":");
+
+        List<Integer> recommendations = recommendItems(targetUser);
+
+        for (int item : recommendations) {
+            System.out.println("Item ID: " + item);
+        }
+    }
+
+    // Load data from file
+    public static void loadData(String fileName) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                int user = Integer.parseInt(parts[0]);
+                int item = Integer.parseInt(parts[1]);
+
+                userData.putIfAbsent(user, new ArrayList<>());
+                userData.get(user).add(item);
+            }
+
+            br.close();
+
+        } catch (Exception e) {
+            System.out.println("Error reading file");
+        }
+    }
+
+    // Recommendation logic
+    public static List<Integer> recommendItems(int user) {
+
+        Set<Integer> recommended = new HashSet<>();
+        List<Integer> targetItems = userData.get(user);
+
+        for (int otherUser : userData.keySet()) {
+
+            if (otherUser != user) {
+                List<Integer> otherItems = userData.get(otherUser);
+
+                for (int item : targetItems) {
+                    if (otherItems.contains(item)) {
+
+                        for (int newItem : otherItems) {
+                            if (!targetItems.contains(newItem)) {
+                                recommended.add(newItem);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return new ArrayList<>(recommended);
+    }
+}
+
